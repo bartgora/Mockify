@@ -43,7 +43,11 @@ class HookFacadeImpl(private val hookService: HookService) : HookFacade {
     ) {
         val exitingHook = hookService.getHook(name)
         if (exitingHook == null) {
-            hookService.saveHook(createNeHook(name, body, headers, HttpMethod.GET))
+            if (method == HttpMethod.GET) {
+                hookService.saveHook(createNeHook(name, body, headers, HttpMethod.GET))
+            } else {
+                throw IllegalStateException("No Hook!")
+            }
         } else {
             exitingHook.requests = exitingHook.requests.plus(createRequest(method, body, headers))
             hookService.saveHook(exitingHook)
