@@ -2,7 +2,6 @@ package pl.mockify.server
 
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
-import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -11,22 +10,37 @@ class WebhookController(private var hookFacade: HookFacade) {
 
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.GET, RequestMethod.DELETE])
-    fun getWebhook(
+    fun bodyLessWebhook(
         @PathVariable name: String,
         @RequestHeader headers: Map<String, String>
-    ): ResponseEntity<List<Request>> {
-        hookFacade.processRequest(name, null, headers, HttpMethod.GET)
-        return ResponseEntity.ok().body(hookFacade.getResponses(name))
+    ): ResponseEntity<Map<String, String>> {
+        return ResponseEntity.ok(hookFacade.processRequest(name, null, headers, HttpMethod.GET).body)
     }
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.POST, RequestMethod.PATCH, RequestMethod.PUT])
-    fun postWebhook(
+    fun bodyWebhook(
         @PathVariable name: String,
         @RequestBody body: Map<String, String>,
         @RequestHeader headers: Map<String, String>,
         servletRequest: HttpServletRequest
-    ): ResponseEntity<List<Request>> {
-        hookFacade.processRequest(name, body, headers, HttpMethod.valueOf(servletRequest.method))
-        return ResponseEntity.ok().body(hookFacade.getResponses(name))
+    ): ResponseEntity<Map<String, String>> {
+        return ResponseEntity.ok(
+            hookFacade.processRequest(
+                name,
+                body,
+                headers,
+                HttpMethod.valueOf(servletRequest.method)
+            ).body
+        )
+    }
+
+    @GetMapping("/hook/{name}/events")
+    fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
+        return ResponseEntity.ok(hookFacade.getEvents(name))
+    }
+
+    @PatchMapping("/hook/{name}/response")
+    fun patchResponse(@PathVariable name: String, @RequestBody body: Map<String, String>): ResponseEntity<Map<String,String>> {
+        return ResponseEntity.ok(hookFacade.updateResponse(name, body).body)
     }
 }
