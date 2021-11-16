@@ -14,7 +14,7 @@
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>1.8</java.version>
 		<kotlin.version>1.5.31</kotlin.version>
 	</properties>
 	<dependencies>
