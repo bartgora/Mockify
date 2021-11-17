@@ -1,11 +1,11 @@
-package pl.mockify.server
+package pl.mockify.server.domain
 
 import org.springframework.stereotype.Service
 
 @Service
 class HookServiceImpl : HookService {
-    val hooks = HashMap<String, Hook>();
-    override fun saveHook(hook: Hook) :Hook {
+    val hooks = HashMap<String, Hook>()
+    override fun saveHook(hook: Hook) : Hook {
         hooks[hook.name] = hook
         return hook
     }
@@ -14,6 +14,6 @@ class HookServiceImpl : HookService {
         if (hooks.contains(customName)) {
             return hooks[customName]
         }
-        return null;
+        return null
     }
 }

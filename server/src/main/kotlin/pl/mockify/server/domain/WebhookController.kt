@@ -1,4 +1,4 @@
-package pl.mockify.server
+package pl.mockify.server.domain
 
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
@@ -40,7 +40,10 @@ class WebhookController(private var hookFacade: HookFacade) {
     }
 
     @PatchMapping("/hook/{name}/response")
-    fun patchResponse(@PathVariable name: String, @RequestBody body: Map<String, String>): ResponseEntity<Map<String,String>> {
+    fun patchResponse(
+        @PathVariable name: String,
+        @RequestBody body: Map<String, String>
+    ): ResponseEntity<Map<String, String>> {
         return ResponseEntity.ok(hookFacade.updateResponse(name, body).body)
     }
 }

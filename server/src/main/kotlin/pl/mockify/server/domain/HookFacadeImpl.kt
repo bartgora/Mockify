@@ -1,10 +1,10 @@
-package pl.mockify.server
+package pl.mockify.server.domain
 
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 
 @Component
-class HookFacadeImpl(private val hookService: HookService) : HookFacade {
+class HookFacadeImpl(private val hookService: HookService, private val hookFactory: HookFactory) : HookFacade {
 
     override fun processRequest(
         name: String,
@@ -20,7 +20,7 @@ class HookFacadeImpl(private val hookService: HookService) : HookFacade {
                 headers,
                 method
             )
-            else -> throw IllegalStateException();
+            else -> throw IllegalStateException()
         }
     }
 
@@ -34,12 +34,11 @@ class HookFacadeImpl(private val hookService: HookService) : HookFacade {
         if (exitingHook == null) {
             throw IllegalStateException("No hook!")
         } else {
-            exitingHook.events =
-                exitingHook.events.plus(createEvent(method, body, headers, exitingHook.responseTemplate))
+            exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
             hookService.saveHook(exitingHook)
 
         }
-        return exitingHook?.events.map { event -> event.response }.last()
+        return exitingHook.events.map { event -> event.response }.last()
     }
 
     private fun createEvent(
@@ -60,33 +59,20 @@ class HookFacadeImpl(private val hookService: HookService) : HookFacade {
         var exitingHook = hookService.getHook(name)
         if (exitingHook == null) {
             if (method == HttpMethod.GET) {
-                exitingHook = hookService.saveHook(createNewHook(name, body, headers, HttpMethod.GET))
+                exitingHook = hookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
             } else {
                 throw IllegalStateException("No Hook!")
             }
         } else {
-            exitingHook.events =
-                exitingHook.events.plus(createEvent(method, body, headers, exitingHook.responseTemplate))
+            exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
             hookService.saveHook(exitingHook)
 
         }
-        return exitingHook?.events.map { event -> event.response }.last()
+        return exitingHook.events.map { event -> event.response }.last()
     }
 
     private fun createRequest(method: HttpMethod, body: Map<String, String>?, headers: Map<String, String>): Request {
         return Request(method, body, headers)
-    }
-
-    private fun createNewHook(
-        name: String,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        method: HttpMethod
-    ): Hook {
-        val request = Request(method, body, headers)
-        val defaultTemplate = Response(body = mapOf(Pair("status", "ok")))
-        val event = Event(request, defaultTemplate);
-        return Hook(name, defaultTemplate, listOf(event))
     }
 
     override fun getEvents(name: String): List<Event> {

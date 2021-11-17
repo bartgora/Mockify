@@ -1,4 +1,4 @@
-package pl.mockify.server
+package pl.mockify.server.domain
 
 interface HookService {
 
