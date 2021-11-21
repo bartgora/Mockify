@@ -1,4 +1,5 @@
 package pl.mockify.server.data
+import java.sql.Timestamp
 import javax.persistence.*
 
 
@@ -16,6 +17,10 @@ class Hook {
 
     @OneToMany()
     lateinit var events: List<Event>
+
+    @Column
+    lateinit var lastModified: Timestamp
+
 }
 
 @Entity
@@ -32,7 +37,7 @@ class Response {
 class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0;
+    var id: Long = 0
 
     @OneToOne
     lateinit var request: Request

@@ -1,5 +1,6 @@
 package pl.mockify.server.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpMethod
 
 class Hook(val name: String, var responseTemplate: Response, var events: List<Event>){
@@ -8,8 +9,14 @@ class Hook(val name: String, var responseTemplate: Response, var events: List<Ev
     }
 }
 
+
 class Request(val method: HttpMethod, val body: Map<String, String>?, val headers: Map<String, String>)
 
 class Response(val body: Map<String, String>)
+
+fun Response.bodyToString(): String? {
+    val objectMapper = ObjectMapper()
+    return objectMapper.writeValueAsString(this.body)
+}
 
 class Event(val request: Request, val response: Response)

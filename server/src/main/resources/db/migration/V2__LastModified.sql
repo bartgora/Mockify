@@ -1,0 +1,2 @@
+ALTER TABLE hook
+    ADD last_modified TIMESTAMP WITHOUT TIME ZONE;
