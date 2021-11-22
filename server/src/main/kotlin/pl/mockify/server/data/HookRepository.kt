@@ -7,6 +7,5 @@ import java.sql.Timestamp
 @Repository
 interface HookRepository : CrudRepository<Hook, Long> {
 
-
-    fun findByLastModifiedGreaterThanEqual(lastModified: Timestamp): List<Hook>
+    fun findByLastModifiedBefore(lastModified: Timestamp): List<Hook>
 }

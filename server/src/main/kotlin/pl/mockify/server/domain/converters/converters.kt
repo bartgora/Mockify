@@ -1,13 +1,10 @@
 package pl.mockify.server.domain.converters
 
-import pl.mockify.server.domain.Event
-import pl.mockify.server.domain.Hook
-import pl.mockify.server.domain.Response
-import pl.mockify.server.domain.bodyToString
+import pl.mockify.server.domain.*
 import pl.mockify.server.data.Event as DBEvent
 import pl.mockify.server.data.Hook as DBHook
+import pl.mockify.server.data.Request as DBRequest
 import pl.mockify.server.data.Response as DBResponse
-
 
 fun convertHookToDB(hook: Hook): DBHook {
     val dbHook = DBHook()
@@ -20,25 +17,32 @@ fun convertHookToDB(hook: Hook): DBHook {
 fun convertResponseToDB(response: Response): DBResponse {
 
     val dbResponse = DBResponse()
-    dbResponse.body = response.bodyToString().toString()
+    dbResponse.body = response.body.bodyToString().toString()
     return dbResponse
 }
 
 fun convertEventsToDB(events: List<Event>): List<DBEvent> {
     return events.map { event -> convertEventToDB(event) }
-
 }
 
 fun convertEventToDB(event: Event): DBEvent {
 
     val dbEvent = DBEvent()
-//    dbEvent.request = event.request
+    dbEvent.request = convertRequestToDB(event.request)
     dbEvent.response = convertResponseToDB(event.response)
     return dbEvent
 }
 
+fun convertRequestToDB(request: Request): DBRequest {
+    val dbRequest = DBRequest()
+    dbRequest.headers = request.headers.bodyToString().toString()
+    return dbRequest;
+}
 
 fun convertHookFromDB(hook: DBHook): Hook {
-    return pl.mockify.server.domain.Hook(hook.name, /*hook.responseTemplate, hook.events*/)
+    val name = hook.name
+    hook.responseTemplate
+    val result = Hook(name)
+    return result
 }
 

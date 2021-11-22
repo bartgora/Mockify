@@ -11,9 +11,8 @@ class ExpireHookCleaner(private var hookRepository: HookRepository) {
 
     @Scheduled(fixedDelay = 600)
     fun execute(){
-        print("execute")
-        val timeStamp = Timestamp.valueOf(LocalDateTime.now())
-        val hooks = hookRepository.findByLastModifiedGreaterThanEqual(timeStamp)
+        val timeStamp = Timestamp.valueOf(LocalDateTime.now().minusMinutes(5))
+        val hooks = hookRepository.findByLastModifiedBefore(timeStamp)
         hookRepository.deleteAll(hooks)
     }
 
