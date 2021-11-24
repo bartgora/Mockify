@@ -4,7 +4,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 
 @Component
-class HookFacadeImpl(private val hookService: HookService, private val hookFactory: HookFactory) : HookFacade {
+class HookFacadeImpl(private val jpaHookService: HookService, private val hookFactory: HookFactory) : HookFacade {
 
     override fun processRequest(
         name: String,
@@ -30,12 +30,12 @@ class HookFacadeImpl(private val hookService: HookService, private val hookFacto
         headers: Map<String, String>,
         method: HttpMethod
     ): Response {
-        val exitingHook = hookService.getHook(name)
+        val exitingHook = jpaHookService.getHook(name)
         if (exitingHook == null) {
             throw IllegalStateException("No hook!")
         } else {
             exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
-            hookService.saveHook(exitingHook)
+            jpaHookService.saveHook(exitingHook)
 
         }
         return exitingHook.events.map { event -> event.response }.last()
@@ -56,16 +56,16 @@ class HookFacadeImpl(private val hookService: HookService, private val hookFacto
         headers: Map<String, String>,
         method: HttpMethod
     ): Response {
-        var exitingHook = hookService.getHook(name)
+        var exitingHook = jpaHookService.getHook(name)
         if (exitingHook == null) {
             if (method == HttpMethod.GET) {
-                exitingHook = hookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
+                exitingHook = jpaHookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
             } else {
                 throw IllegalStateException("No Hook!")
             }
         } else {
             exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
-            hookService.saveHook(exitingHook)
+            jpaHookService.saveHook(exitingHook)
 
         }
         return exitingHook.events.map { event -> event.response }.last()
@@ -76,12 +76,12 @@ class HookFacadeImpl(private val hookService: HookService, private val hookFacto
     }
 
     override fun getEvents(name: String): List<Event> {
-        return hookService.getHook(name)!!.events
+        return jpaHookService.getHook(name)!!.events
 
     }
 
     override fun updateResponse(name: String, body: Map<String, String>): Response {
-        val hook = hookService.getHook(name)
+        val hook = jpaHookService.getHook(name)
         val newResponse = Response(body)
         hook?.responseTemplate = newResponse
         return newResponse

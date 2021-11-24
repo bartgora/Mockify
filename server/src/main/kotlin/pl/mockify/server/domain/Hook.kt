@@ -14,9 +14,6 @@ class Request(val method: HttpMethod, val body: Map<String, String>?, val header
 
 class Response(val body: Map<String, String>)
 
-fun Map<String, String>.bodyToString(): String? {
-    val objectMapper = ObjectMapper()
-    return objectMapper.writeValueAsString(this)
-}
+
 
 class Event(val request: Request, val response: Response)

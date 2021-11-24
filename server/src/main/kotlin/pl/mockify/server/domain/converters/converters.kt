@@ -1,5 +1,6 @@
 package pl.mockify.server.domain.converters
 
+import org.springframework.http.HttpMethod
 import pl.mockify.server.domain.*
 import pl.mockify.server.data.Event as DBEvent
 import pl.mockify.server.data.Hook as DBHook
@@ -39,10 +40,30 @@ fun convertRequestToDB(request: Request): DBRequest {
     return dbRequest;
 }
 
-fun convertHookFromDB(hook: DBHook): Hook {
-    val name = hook.name
-    hook.responseTemplate
-    val result = Hook(name)
-    return result
+fun convertHookFromDB(dbHook: DBHook): Hook {
+    val name = dbHook.name
+    val response = convertDBResponseToResponse(dbHook.responseTemplate)
+    val events = convertDBEventsToEvents(dbHook.events)
+    return Hook(name, response, events)
+}
+
+fun convertDBResponseToResponse(dbResponse: DBResponse): Response {
+    return Response(dbResponse.body.stringToBody())
+}
+
+fun convertDBRequest(dbRequest: DBRequest): Request {
+    return Request(HttpMethod.valueOf(dbRequest.method),
+                   dbRequest.body.stringToBody(),
+                   dbRequest.headers.stringToBody())
+}
+
+fun convertDBEventsToEvents(dbEvents: List<DBEvent>): List<Event> {
+    return dbEvents.map { dbEvent -> convertDbEventToEvent(dbEvent) }
+}
+
+fun convertDbEventToEvent(dbEvent: DBEvent): Event {
+    val response = convertDBResponseToResponse(dbEvent.response)
+    val request = convertDBRequest(dbEvent.request)
+    return Event(response = response, request = request)
 }
 

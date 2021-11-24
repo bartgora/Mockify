@@ -12,10 +12,10 @@ class Hook {
     @Column
     lateinit var name: String
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var responseTemplate: Response
 
-    @OneToMany()
+    @OneToMany(cascade = [CascadeType.ALL] )
     lateinit var events: List<Event>
 
     @Column
@@ -29,7 +29,8 @@ class Response {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
 
-    @Column
+    @Column(columnDefinition = "TEXT")
+    @Lob
     lateinit var body: String
 }
 
@@ -39,10 +40,10 @@ class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var request: Request
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var response: Response
 }
 
@@ -55,9 +56,11 @@ class Request {
     @Column
     lateinit var method: String
 
-    @Column
+    @Column(columnDefinition = "TEXT")
+    @Lob
     lateinit var body: String
 
-    @Column
+    @Column(columnDefinition = "TEXT")
+    @Lob
     lateinit var headers: String
 }

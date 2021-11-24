@@ -7,11 +7,13 @@ import pl.mockify.server.domain.converters.convertHookToDB
 
 @Service
 class JpaHookService(private var hookRepository: HookRepository) : HookService {
+
     override fun saveHook(hook: Hook): Hook {
         return convertHookFromDB(hookRepository.save(convertHookToDB(hook)))
     }
 
     override fun getHook(customName: String): Hook? {
-        TODO("Not yet implemented")
+        val hook = hookRepository.getByName(customName) ?: return null
+        return convertHookFromDB(hook)
     }
 }
