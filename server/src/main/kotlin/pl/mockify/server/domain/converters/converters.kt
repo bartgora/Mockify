@@ -2,6 +2,8 @@ package pl.mockify.server.domain.converters
 
 import org.springframework.http.HttpMethod
 import pl.mockify.server.domain.*
+import java.sql.Timestamp
+import java.time.LocalDateTime
 import pl.mockify.server.data.Event as DBEvent
 import pl.mockify.server.data.Hook as DBHook
 import pl.mockify.server.data.Request as DBRequest
@@ -9,6 +11,7 @@ import pl.mockify.server.data.Response as DBResponse
 
 fun convertHookToDB(hook: Hook): DBHook {
     val dbHook = DBHook()
+    dbHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
     dbHook.name = hook.name
     dbHook.responseTemplate = convertResponseToDB(hook.responseTemplate)
     dbHook.events = convertEventsToDB(hook.events)
@@ -18,7 +21,7 @@ fun convertHookToDB(hook: Hook): DBHook {
 fun convertResponseToDB(response: Response): DBResponse {
 
     val dbResponse = DBResponse()
-    dbResponse.body = response.body.bodyToString().toString()
+    dbResponse.body = bodyToString(response.body)
     return dbResponse
 }
 
@@ -36,7 +39,8 @@ fun convertEventToDB(event: Event): DBEvent {
 
 fun convertRequestToDB(request: Request): DBRequest {
     val dbRequest = DBRequest()
-    dbRequest.headers = request.headers.bodyToString().toString()
+    dbRequest.headers = bodyToString(request.headers)
+    dbRequest.method = request.method.toString()
     return dbRequest;
 }
 
@@ -48,12 +52,12 @@ fun convertHookFromDB(dbHook: DBHook): Hook {
 }
 
 fun convertDBResponseToResponse(dbResponse: DBResponse): Response {
-    return Response(dbResponse.body.stringToBody())
+    return Response(dbResponse.body?.stringToBody() ?: emptyMap())
 }
 
 fun convertDBRequest(dbRequest: DBRequest): Request {
     return Request(HttpMethod.valueOf(dbRequest.method),
-                   dbRequest.body.stringToBody(),
+                   dbRequest.body?.stringToBody(),
                    dbRequest.headers.stringToBody())
 }
 

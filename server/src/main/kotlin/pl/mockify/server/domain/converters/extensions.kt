@@ -2,9 +2,9 @@ package pl.mockify.server.domain.converters
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-fun Map<String, String>.bodyToString(): String? {
+fun bodyToString(map: Map<String, String>): String {
     val objectMapper = ObjectMapper()
-    return objectMapper.writeValueAsString(this)
+    return objectMapper.writeValueAsString(map)
 }
 
 fun String.stringToBody() : Map<String,String>{

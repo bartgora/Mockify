@@ -84,6 +84,9 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
         val hook = jpaHookService.getHook(name)
         val newResponse = Response(body)
         hook?.responseTemplate = newResponse
+        if (hook != null) {
+            jpaHookService.saveHook(hook)
+        }
         return newResponse
     }
 }
