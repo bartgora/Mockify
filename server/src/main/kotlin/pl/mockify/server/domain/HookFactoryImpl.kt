@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class HookFactoryImpl : HookFactory {
+
     override fun createNewHook(
-        name: String,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        method: HttpMethod
+            name: String,
+            body: Map<String, String>?,
+            headers: Map<String, String>,
+            method: HttpMethod
     ): Hook {
         val request = Request(method, body, headers)
         val defaultTemplate = Response(body = mapOf(Pair("status", "ok")))

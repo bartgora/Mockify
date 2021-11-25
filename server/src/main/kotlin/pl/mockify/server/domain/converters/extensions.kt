@@ -7,7 +7,7 @@ fun bodyToString(map: Map<String, String>): String {
     return objectMapper.writeValueAsString(map)
 }
 
-fun String.stringToBody() : Map<String,String>{
+fun String.stringToBody(): Map<String, String> {
     val objectMapper = ObjectMapper()
     return objectMapper.readValue(this, Map::class.java) as Map<String, String>
 }

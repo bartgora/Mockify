@@ -1,8 +1,10 @@
-package pl.mockify.server.domain
+package pl.mockify.server.domain.services.impl
 
 import org.springframework.stereotype.Service
 import pl.mockify.server.data.HookRepository
+import pl.mockify.server.domain.Hook
 import pl.mockify.server.domain.converters.*
+import pl.mockify.server.domain.services.HookService
 import java.sql.Timestamp
 import java.time.LocalDateTime
 

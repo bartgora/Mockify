@@ -1,34 +1,37 @@
-package pl.mockify.server.domain
+package pl.mockify.server.domain.facades.impl
 
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
+import pl.mockify.server.domain.*
+import pl.mockify.server.domain.facades.HookFacade
+import pl.mockify.server.domain.services.HookService
 
 @Component
 class HookFacadeImpl(private val jpaHookService: HookService, private val hookFactory: HookFactory) : HookFacade {
 
     override fun processRequest(
-        name: String,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        method: HttpMethod
+            name: String,
+            body: Map<String, String>?,
+            headers: Map<String, String>,
+            method: HttpMethod
     ): Response {
         return when (method) {
             HttpMethod.GET, HttpMethod.DELETE -> processEmptyRequestBody(name, body, headers, method)
             HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH -> processWithRequestBody(
-                name,
-                body,
-                headers,
-                method
+                    name,
+                    body,
+                    headers,
+                    method
             )
             else -> throw IllegalStateException()
         }
     }
 
     private fun processWithRequestBody(
-        name: String,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        method: HttpMethod
+            name: String,
+            body: Map<String, String>?,
+            headers: Map<String, String>,
+            method: HttpMethod
     ): Response {
         val exitingHook = jpaHookService.getHook(name)
         if (exitingHook == null) {
@@ -36,25 +39,24 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
         } else {
             exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
             jpaHookService.saveHook(exitingHook)
-
         }
         return exitingHook.events.map { event -> event.response }.last()
     }
 
     private fun createEvent(
-        method: HttpMethod,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        responseTemplate: Response
+            method: HttpMethod,
+            body: Map<String, String>?,
+            headers: Map<String, String>,
+            responseTemplate: Response
     ): Event {
         return Event(createRequest(method, body, headers), responseTemplate)
     }
 
     private fun processEmptyRequestBody(
-        name: String,
-        body: Map<String, String>?,
-        headers: Map<String, String>,
-        method: HttpMethod
+            name: String,
+            body: Map<String, String>?,
+            headers: Map<String, String>,
+            method: HttpMethod
     ): Response {
         var exitingHook = jpaHookService.getHook(name)
         if (exitingHook == null) {
@@ -66,7 +68,6 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
         } else {
             exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
             jpaHookService.saveHook(exitingHook)
-
         }
         return exitingHook.events.map { event -> event.response }.last()
     }
@@ -77,7 +78,6 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
 
     override fun getEvents(name: String): List<Event> {
         return jpaHookService.getHook(name)!!.events
-
     }
 
     override fun updateResponse(name: String, body: Map<String, String>): Response {

@@ -5,7 +5,7 @@ import org.springframework.http.HttpMethod
 class Hook(val name: String, var responseTemplate: Response, var events: List<Event>) {
 
     fun addEvent(event: Event) {
-       events = events.plus(event)
+        events = events.plus(event)
     }
 }
 
