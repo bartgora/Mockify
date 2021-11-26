@@ -13,8 +13,8 @@ class Hook {
     @Column
     lateinit var name: String
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    lateinit var responseTemplate: Response
+    @Column(columnDefinition = "TEXT")
+    lateinit var responseTemplate: String
 
     @OneToMany(cascade = [CascadeType.ALL])
     lateinit var events: List<Event>
