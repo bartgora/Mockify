@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.mockify</groupId>
 	<artifactId>server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
@@ -80,9 +80,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.kotest</groupId>
-			<artifactId>kotest-core-jvm</artifactId>
-			<version>4.2.0.RC2</version>
+			<groupId>io.github.microutils</groupId>
+			<artifactId>kotlin-logging-jvm</artifactId>
+			<version>2.0.10</version>
 		</dependency>
 
 
@@ -118,7 +118,7 @@
 			<plugin>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<groupId>org.jetbrains.kotlin</groupId>
-				<version>1.2.30</version>
+				<version>1.5.31</version>
 				<configuration>
 					<compilerPlugins>
 						<plugin>jpa</plugin>
@@ -129,7 +129,7 @@
 					<dependency>
 						<groupId>org.jetbrains.kotlin</groupId>
 						<artifactId>kotlin-maven-noarg</artifactId>
-						<version>1.2.30</version>
+						<version>1.5.21</version>
 					</dependency>
 				</dependencies>
 				<!--...-->

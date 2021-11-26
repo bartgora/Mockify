@@ -1,9 +1,11 @@
 package pl.mockify.server.data
-import javax.persistence.*
 
+import java.sql.Timestamp
+import javax.persistence.*
 
 @Entity
 class Hook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
@@ -11,38 +13,44 @@ class Hook {
     @Column
     lateinit var name: String
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var responseTemplate: Response
 
-    @OneToMany()
+    @OneToMany(cascade = [CascadeType.ALL])
     lateinit var events: List<Event>
+
+    @Column
+    lateinit var lastModified: Timestamp
 }
 
 @Entity
 class Response {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
 
-    @Column
-    lateinit var body: String
+    @Column(columnDefinition = "TEXT")
+    var body: String? = null
 }
 
 @Entity
 class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0;
+    var id: Long = 0
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var request: Request
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var response: Response
 }
 
 @Entity
 class Request {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
@@ -50,9 +58,10 @@ class Request {
     @Column
     lateinit var method: String
 
-    @Column
-    lateinit var body: String
+    @Column(columnDefinition = "TEXT")
+    @Lob
+    var body: String? = null
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     lateinit var headers: String
 }
