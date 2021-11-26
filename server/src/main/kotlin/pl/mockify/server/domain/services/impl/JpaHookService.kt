@@ -26,4 +26,8 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
         val hook = hookRepository.getByName(customName) ?: return null
         return convertHookFromDB(hook)
     }
+
+    override fun updateResponse(hook: Hook): Hook {
+        TODO("Not yet implemented")
+    }
 }
