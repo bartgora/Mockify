@@ -3,7 +3,10 @@ package pl.mockify.server.domain.services.impl
 import org.springframework.stereotype.Service
 import pl.mockify.server.data.HookRepository
 import pl.mockify.server.domain.Hook
-import pl.mockify.server.domain.converters.*
+import pl.mockify.server.domain.converters.bodyToString
+import pl.mockify.server.domain.converters.convertEventToDB
+import pl.mockify.server.domain.converters.convertHookFromDB
+import pl.mockify.server.domain.converters.convertHookToDB
 import pl.mockify.server.domain.services.HookService
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -28,6 +31,8 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
     }
 
     override fun updateResponse(hook: Hook): Hook {
-        TODO("Not yet implemented")
+        val existingHook = hookRepository.getByName(hook.name)
+        existingHook?.responseTemplate = bodyToString(hook.responseTemplate.body)
+        return convertHookFromDB(hookRepository.save(existingHook!!))
     }
 }
