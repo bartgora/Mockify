@@ -15,7 +15,7 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
         val existingHook = hookRepository.getByName(hook.name)
         if (existingHook != null) {
             existingHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
-            existingHook.responseTemplate = convertResponseToDB(hook.responseTemplate)
+            existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
             existingHook.events = existingHook.events.plus(convertEventToDB(hook.events.last()))
             return convertHookFromDB(hookRepository.save(existingHook))
         }
