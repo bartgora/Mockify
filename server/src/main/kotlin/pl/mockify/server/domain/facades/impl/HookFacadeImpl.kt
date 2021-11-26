@@ -2,7 +2,10 @@ package pl.mockify.server.domain.facades.impl
 
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
-import pl.mockify.server.domain.*
+import pl.mockify.server.domain.Event
+import pl.mockify.server.domain.HookFactory
+import pl.mockify.server.domain.Request
+import pl.mockify.server.domain.Response
 import pl.mockify.server.domain.facades.HookFacade
 import pl.mockify.server.domain.services.HookService
 
@@ -85,7 +88,7 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
         val newResponse = Response(body)
         hook?.responseTemplate = newResponse
         if (hook != null) {
-            jpaHookService.saveHook(hook)
+            jpaHookService.updateResponse(hook)
         }
         return newResponse
     }
