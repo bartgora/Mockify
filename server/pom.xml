@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.mockify</groupId>
 	<artifactId>server</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.5</version>
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
