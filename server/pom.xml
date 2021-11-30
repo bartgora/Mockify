@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.mockify</groupId>
 	<artifactId>server</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.6</version>
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
@@ -83,6 +83,15 @@
 			<groupId>io.github.microutils</groupId>
 			<artifactId>kotlin-logging-jvm</artifactId>
 			<version>2.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+			<version>2.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 
