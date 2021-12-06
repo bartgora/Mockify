@@ -1,5 +1,6 @@
 package pl.mockify.server.domain.services.impl
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 import pl.mockify.server.data.HookRepository
@@ -13,8 +14,9 @@ import java.time.LocalDateTime
 class JpaHookService(private var hookRepository: HookRepository) : HookService {
 
     override suspend fun saveHook(hook: Hook): Hook {
-       return runBlocking {
-            val existingHook =  hookRepository.getByName(hook.name)
+        return runBlocking {
+            val asyncExistingHook = async { hookRepository.getByName(hook.name) }
+            val existingHook = asyncExistingHook.await()
             if (existingHook != null) {
                 existingHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
                 existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
@@ -31,8 +33,13 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
     }
 
     override suspend fun updateResponse(hook: Hook): Hook {
-        val existingHook = hookRepository.getByName(hook.name)
-        existingHook?.responseTemplate = bodyToString(hook.responseTemplate.body)
-        return convertHookFromDB(hookRepository.save(existingHook!!))
+        return runBlocking {
+            val asyncExistingHook = async{
+                hookRepository.getByName(hook.name)
+            }
+            val existingHook = asyncExistingHook.await()
+            existingHook?.responseTemplate = bodyToString(hook.responseTemplate.body)
+            return@runBlocking convertHookFromDB(hookRepository.save(existingHook!!))
+        }
     }
 }
