@@ -34,12 +34,9 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
             method: HttpMethod
     ): Response {
         val exitingHook = jpaHookService.getHook(name)
-        if (exitingHook == null) {
-            throw IllegalStateException("No hook!")
-        } else {
-            exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
-            jpaHookService.saveHook(exitingHook)
-        }
+        exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
+        jpaHookService.saveHook(exitingHook)
+
         return exitingHook.events.map { event -> event.response }.last()
     }
 
@@ -84,9 +81,8 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
         val hook = jpaHookService.getHook(name)
         val newResponse = Response(body)
         hook?.responseTemplate = newResponse
-        if (hook != null) {
-            jpaHookService.updateResponse(hook)
-        }
+        jpaHookService.updateResponse(hook!!)
+
         return newResponse
     }
 }
