@@ -21,7 +21,9 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
                 existingHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
                 existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
                 existingHook.events = existingHook.events.plus(convertEventToDB(hook.events.last()))
-                return@runBlocking convertHookFromDB(hookRepository.save(existingHook))
+                val asyncSavedHook = async { hookRepository.save(existingHook) }
+                val savedHook = asyncSavedHook.await()
+                return@runBlocking convertHookFromDB(savedHook)
             }
             return@runBlocking convertHookFromDB(hookRepository.save(convertHookToDB(hook)))
         }
@@ -34,12 +36,14 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
 
     override suspend fun updateResponse(hook: Hook): Hook {
         return runBlocking {
-            val asyncExistingHook = async{
+            val asyncExistingHook = async {
                 hookRepository.getByName(hook.name)
             }
             val existingHook = asyncExistingHook.await()
             existingHook?.responseTemplate = bodyToString(hook.responseTemplate.body)
-            return@runBlocking convertHookFromDB(hookRepository.save(existingHook!!))
+            val asyncSavedHook = async { hookRepository.save(existingHook!!) }
+            val saveHook = asyncSavedHook.await()
+            return@runBlocking convertHookFromDB(saveHook)
         }
     }
 }
