@@ -1,5 +1,6 @@
 package pl.mockify.server.domain
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -7,7 +8,7 @@ import pl.mockify.server.domain.facades.HookFacade
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-class WebhookController(private var hookFacade: HookFacade) {
+class WebhookController(private var hookFacade: HookFacade, meterRegisrty: MeterRegistry) {
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.GET, RequestMethod.DELETE])
     suspend fun bodyLessWebhook(
