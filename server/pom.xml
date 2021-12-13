@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.mockify</groupId>
 	<artifactId>server</artifactId>
-	<version>1.0.7</version>
+	<version>1.1.0</version>
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
@@ -97,6 +97,16 @@
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-coroutines-core</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlinx</groupId>
+			<artifactId>kotlinx-coroutines-reactor</artifactId>
+			<version>1.5.1</version>
 		</dependency>
 
 

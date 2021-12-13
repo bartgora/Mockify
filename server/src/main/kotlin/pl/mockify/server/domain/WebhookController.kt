@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest
 class WebhookController(private var hookFacade: HookFacade, meterRegisrty: MeterRegistry) {
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.GET, RequestMethod.DELETE])
-    fun bodyLessWebhook(
+    suspend fun bodyLessWebhook(
             @PathVariable name: String,
             @RequestHeader headers: Map<String, String>
     ): ResponseEntity<Map<String, String>> {
@@ -19,7 +19,7 @@ class WebhookController(private var hookFacade: HookFacade, meterRegisrty: Meter
     }
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.POST, RequestMethod.PATCH, RequestMethod.PUT])
-    fun bodyWebhook(
+    suspend fun bodyWebhook(
             @PathVariable name: String,
             @RequestBody body: Map<String, String>,
             @RequestHeader headers: Map<String, String>,
@@ -36,12 +36,12 @@ class WebhookController(private var hookFacade: HookFacade, meterRegisrty: Meter
     }
 
     @GetMapping("/hook/{name}/events")
-    fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
+    suspend fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
         return ResponseEntity.ok(hookFacade.getEvents(name))
     }
 
     @PatchMapping("/hook/{name}/response")
-    fun patchResponse(
+    suspend fun patchResponse(
             @PathVariable name: String,
             @RequestBody body: Map<String, String>
     ): ResponseEntity<Map<String, String>> {

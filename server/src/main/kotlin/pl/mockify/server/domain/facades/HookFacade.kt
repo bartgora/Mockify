@@ -6,12 +6,12 @@ import pl.mockify.server.domain.Response
 
 interface HookFacade {
 
-    fun processRequest(name: String,
+    suspend fun processRequest(name: String,
                        body: Map<String, String>?,
                        headers: Map<String, String>,
                        method: HttpMethod): Response
 
-    fun getEvents(name: String): List<Event>
+    suspend fun getEvents(name: String): List<Event>
 
-    fun updateResponse(name: String, body: Map<String, String>): Response
+    suspend fun updateResponse(name: String, body: Map<String, String>): Response
 }
