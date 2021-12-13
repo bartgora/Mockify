@@ -55,18 +55,18 @@ class HookFacadeImpl(private val jpaHookService: HookService, private val hookFa
             headers: Map<String, String>,
             method: HttpMethod
     ): Response {
-        var exitingHook = jpaHookService.getHook(name)
-        if (exitingHook == null) {
+        var existingHook = jpaHookService.getHook(name)
+        if (existingHook == null) {
             if (method == HttpMethod.GET) {
-                exitingHook = jpaHookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
+                existingHook = jpaHookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
             } else {
                 throw IllegalStateException("No Hook!")
             }
         } else {
-            exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
-            jpaHookService.saveHook(exitingHook)
+            existingHook.addEvent(createEvent(method, body, headers, existingHook.responseTemplate))
+            jpaHookService.saveHook(existingHook)
         }
-        return exitingHook.events.map { event -> event.response }.last()
+        return existingHook.events.map { event -> event.response }.last()
     }
 
     private fun createRequest(method: HttpMethod, body: Map<String, String>?, headers: Map<String, String>): Request {
