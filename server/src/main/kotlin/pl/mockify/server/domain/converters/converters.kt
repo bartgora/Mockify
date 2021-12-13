@@ -41,6 +41,7 @@ fun convertRequestToDB(request: Request): DBRequest {
     val dbRequest = DBRequest()
     dbRequest.headers = bodyToString(request.headers)
     dbRequest.method = request.method.toString()
+    dbRequest.body = request.body?.let { bodyToString(it) }
     return dbRequest;
 }
 
