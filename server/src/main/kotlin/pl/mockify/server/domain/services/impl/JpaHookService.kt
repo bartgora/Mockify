@@ -29,10 +29,10 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
         }
     }
 
-    override suspend fun getHook(customName: String): Hook {
+    override suspend fun getHook(customName: String): Hook? {
         return runBlocking {
-            val asyncHook =  async {hookRepository.getByName(customName)}
-            val hook = asyncHook.await() ?: throw IllegalStateException("No Hook found")
+            val asyncHook = async { hookRepository.getByName(customName) }
+            val hook = asyncHook.await() ?: return@runBlocking null
             return@runBlocking convertHookFromDB(hook)
         }
     }
