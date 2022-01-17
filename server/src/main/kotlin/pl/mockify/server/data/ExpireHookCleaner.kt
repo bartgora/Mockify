@@ -1,7 +1,6 @@
 package pl.mockify.server.data
 
 import mu.KotlinLogging
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
@@ -12,7 +11,7 @@ open class ExpireHookCleaner(private var hookRepository: HookRepository) {
 
     private var logger = KotlinLogging.logger("ExpireHookCleaner")
 
-    @Scheduled(fixedDelay = 1800000)
+//    @Scheduled(fixedDelay = 1800000)
     @Transactional
     open fun execute() {
         logger.info { "Executing Scheduler" }
