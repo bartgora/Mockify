@@ -4,9 +4,9 @@ import pl.mockify.server.domain.Hook
 
 interface HookService {
 
-    suspend fun saveHook(hook: Hook): Hook
+    fun saveHook(hook: Hook): Hook
 
-    suspend fun getHook(customName: String): Hook?
+    fun getHook(customName: String): Hook
 
-    suspend fun updateResponse(hook: Hook) : Hook
+    fun updateResponse(hook: Hook) : Hook
 }
