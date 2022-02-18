@@ -35,7 +35,7 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
 
     override fun updateResponse(hook: Hook): Hook {
 
-        val existingHook = hookRepository.findByName(hook.name).orElseThrow()
+        val existingHook = hookRepository.findByName(hook.name).orElseThrow { IllegalStateException("No Hook!") }
         existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
         val saveHook = hookRepository.save(existingHook)
         return convertHookFromDB(saveHook)

@@ -30,6 +30,20 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
         }
     }
 
+    fun updateResponse(name: String, body: Map<String, String>): Response {
+        val hook = jpaHookService.getHook(name) ?: throw IllegalStateException("No Hook!")
+        val newResponse = Response(body)
+        hook.responseTemplate = newResponse
+        jpaHookService.updateResponse(hook)
+
+        return newResponse
+    }
+
+    fun getEvents(name: String): List<Event> {
+        val hook = jpaHookService.getHook(name)?: throw IllegalStateException("No Hook!")
+        return hook.events
+    }
+
     private fun processWithRequestBody(
         name: String,
         body: Map<String, String>?,
@@ -79,18 +93,5 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
 
     private fun createRequest(method: HttpMethod, body: Map<String, String>?, headers: Map<String, String>): Request {
         return Request(method, body, headers)
-    }
-
-    fun getEvents(name: String): List<Event> {
-        return jpaHookService.getHook(name)!!.events
-    }
-
-    fun updateResponse(name: String, body: Map<String, String>): Response {
-        val hook = jpaHookService.getHook(name)
-        val newResponse = Response(body)
-        hook!!.responseTemplate = newResponse
-        jpaHookService.updateResponse(hook!!)
-
-        return newResponse
     }
 }
