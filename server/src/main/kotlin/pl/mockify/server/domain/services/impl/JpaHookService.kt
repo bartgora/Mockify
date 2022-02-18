@@ -27,8 +27,8 @@ class JpaHookService(private var hookRepository: HookRepository) : HookService {
         return convertHookFromDB(hookRepository.save(convertHookToDB(hook)))
     }
 
-    override fun getHook(customName: String): Hook {
-        val hook = hookRepository.findByName(customName).orElseThrow()
+    override fun getHook(customName: String): Hook? {
+        val hook = hookRepository.findByName(customName).orElse(null) ?: return null
         return convertHookFromDB(hook)
 
     }

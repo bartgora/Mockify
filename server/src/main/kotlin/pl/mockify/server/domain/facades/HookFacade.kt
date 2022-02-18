@@ -80,13 +80,13 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
     }
 
     fun getEvents(name: String): List<Event> {
-        return jpaHookService.getHook(name).events
+        return jpaHookService.getHook(name)!!.events
     }
 
     fun updateResponse(name: String, body: Map<String, String>): Response {
         val hook = jpaHookService.getHook(name)
         val newResponse = Response(body)
-        hook.responseTemplate = newResponse
+        hook!!.responseTemplate = newResponse
         jpaHookService.updateResponse(hook!!)
 
         return newResponse
