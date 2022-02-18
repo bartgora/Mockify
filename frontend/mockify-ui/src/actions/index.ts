@@ -1,6 +1,6 @@
-import {Dispatch} from 'react';
-import events from '../api/events';
-import {ActionType} from './types';
+import { Dispatch } from "react";
+import events from "../api/events";
+import { ActionType } from "./types";
 
 export interface Request {
   method: string;

@@ -1,10 +1,10 @@
-import { Container, Header } from "semantic-ui-react";
+import { EventsView } from "./components/EventView";
 
 const App = () => {
   return (
     <>
-      <Container text>
-        <Header as="h2"></Header>
+      <div className="ui segment">
+        <div className="ui header">Mockify</div>
         <p>
           GET: /hook/[HOOKNAME] - creates hook
           <br />
@@ -16,7 +16,10 @@ const App = () => {
           "Supported Methods: GET, POST, PUT, PATCH,DELETE"
           <br />
         </p>
-      </Container>
+      </div>
+      <div className="ui segment">
+        <EventsView />
+      </div>
     </>
   );
 };
