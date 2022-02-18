@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Event, fetchData } from "../actions";
-import { StoreState } from "../reducers";
-import EventPanel from "./EventPanel";
+import React from 'react';
+import {connect} from 'react-redux';
+import {Event, fetchData} from '../actions';
+import {StoreState} from '../reducers';
+import EventPanel from './EventPanel';
 
 interface Props {
   events: Event[];
@@ -22,15 +22,13 @@ class _EventsView extends React.Component<Props> {
     return (
       <>
         <div className="ui header">Events</div>
-        <div className="ui ">
-          {this.props.events.map((event) => {
-            return (
-              <div key={index++} className="item">
-                <EventPanel event={event} />
-              </div>
-            );
-          })}
-        </div>
+        {this.props.events.map((event) => {
+          return (
+            <div key={index++} className="item">
+              <EventPanel event={event} />
+            </div>
+          );
+        })}
       </>
     );
   }

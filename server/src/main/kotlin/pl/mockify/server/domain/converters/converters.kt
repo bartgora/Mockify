@@ -34,6 +34,7 @@ fun convertEventToDB(event: Event): DBEvent {
     val dbEvent = DBEvent()
     dbEvent.request = convertRequestToDB(event.request)
     dbEvent.response = convertResponseToDB(event.response)
+    dbEvent.timestamp = Timestamp.valueOf(event.timestamp)
     return dbEvent
 }
 
@@ -57,9 +58,11 @@ fun convertDBResponseToResponse(dbResponse: DBResponse): Response {
 }
 
 fun convertDBRequest(dbRequest: DBRequest): Request {
-    return Request(HttpMethod.valueOf(dbRequest.method),
-                   dbRequest.body?.stringToBody(),
-                   dbRequest.headers.stringToBody())
+    return Request(
+        HttpMethod.valueOf(dbRequest.method),
+        dbRequest.body?.stringToBody(),
+        dbRequest.headers.stringToBody()
+    )
 }
 
 fun convertDBEventsToEvents(dbEvents: List<DBEvent>): List<Event> {
@@ -69,6 +72,6 @@ fun convertDBEventsToEvents(dbEvents: List<DBEvent>): List<Event> {
 fun convertDbEventToEvent(dbEvent: DBEvent): Event {
     val response = convertDBResponseToResponse(dbEvent.response)
     val request = convertDBRequest(dbEvent.request)
-    return Event(response = response, request = request)
+    return Event(response = response, request = request, timestamp = dbEvent.timestamp.toLocalDateTime())
 }
 

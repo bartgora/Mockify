@@ -1,0 +1,2 @@
+ALTER TABLE event
+    ADD timestamp TIMESTAMP WITHOUT TIME ZONE;

@@ -7,6 +7,7 @@ import pl.mockify.server.domain.HookFactory
 import pl.mockify.server.domain.Request
 import pl.mockify.server.domain.Response
 import pl.mockify.server.domain.services.HookService
+import java.time.LocalDateTime
 
 @Component
 class HookFacade(private val jpaHookService: HookService, private val hookFactory: HookFactory) {
@@ -52,7 +53,8 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
         headers: Map<String, String>,
         responseTemplate: Response
     ): Event {
-        return Event(createRequest(method, body, headers), responseTemplate)
+        LocalDateTime.now();
+        return Event(createRequest(method, body, headers), responseTemplate, LocalDateTime.now())
     }
 
     private fun processEmptyRequestBody(

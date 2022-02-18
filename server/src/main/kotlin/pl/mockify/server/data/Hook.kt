@@ -41,6 +41,9 @@ class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
 
+    @Column
+    lateinit var timestamp : Timestamp
+
     @OneToOne(cascade = [CascadeType.ALL])
     lateinit var request: Request
 

@@ -1,6 +1,6 @@
-import { Dispatch } from "react";
-import events from "../api/events";
-import { ActionType } from "./types";
+import {Dispatch} from 'react';
+import events from '../api/events';
+import {ActionType} from './types';
 
 export interface Request {
   method: string;
@@ -14,6 +14,7 @@ export interface Respone {
 export interface Event {
   request: Request;
   response: Respone;
+  timestamp: Date;
 }
 
 export interface FecthAction {
