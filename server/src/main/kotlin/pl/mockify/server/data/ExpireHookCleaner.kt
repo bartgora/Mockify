@@ -12,7 +12,7 @@ open class ExpireHookCleaner(private var hookRepository: HookRepository) {
 
     private var logger = KotlinLogging.logger("ExpireHookCleaner")
 
-    @Scheduled(cron = "0/1 0/15 0 ? * * *")
+    @Scheduled(cron = "0 */15 * ? * *")
     @Transactional
     open fun execute() {
         logger.info { "Executing Scheduler" }

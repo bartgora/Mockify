@@ -62,7 +62,6 @@ class Request {
     lateinit var method: String
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     var body: String? = null
 
     @Column(columnDefinition = "TEXT")

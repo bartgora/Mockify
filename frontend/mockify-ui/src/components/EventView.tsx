@@ -22,9 +22,10 @@ class _EventsView extends React.Component<Props> {
     return (
       <>
         <div className="ui header">Events</div>
+        <div className="ui divider"></div>
         {this.props.events.map((event) => {
           return (
-            <div key={index++} className="item">
+            <div key={index++} className="ui items">
               <EventPanel event={event} />
             </div>
           );

@@ -7,12 +7,12 @@ interface Props {
 class EventPanel extends React.Component<Props, Props> {
   render(): React.ReactNode {
     return (
-      <div className="ui item">
-        <div className="ui content">
-          <div className="ui header">
+      <div className="item">
+        <div className="content">
+          <div className="header">
             Method: {this.props.event.request.method}, Date: {this.props.event.timestamp}
           </div>
-          <div className=" ui content">{JSON.stringify(this.props.event.response.body)}</div>
+          <div className="content">{JSON.stringify(this.props.event.response.body)}</div>
           <div className="ui divider"></div>
         </div>
       </div>
