@@ -19,7 +19,6 @@ class HookFacadeFunctionalTest : TestBase() {
         assert(hook.isPresent)
         hook.ifPresent {
             it.name shouldBe givenHookName
-            it.events.size shouldBe 1
     }
 
 
