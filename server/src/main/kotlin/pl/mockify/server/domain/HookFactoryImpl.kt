@@ -2,6 +2,7 @@ package pl.mockify.server.domain
 
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 
 @Component
 class HookFactoryImpl : HookFactory {
@@ -14,7 +15,7 @@ class HookFactoryImpl : HookFactory {
     ): Hook {
         val request = Request(method, body, headers)
         val defaultTemplate = Response(body = mapOf(Pair("status", "ok")))
-        val event = Event(request, defaultTemplate)
+        val event = Event(request, defaultTemplate, LocalDateTime.now())
         return Hook(name, defaultTemplate, listOf(event))
     }
 }

@@ -1,6 +1,5 @@
 package pl.mockify.server.domain
 
-import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -8,10 +7,10 @@ import pl.mockify.server.domain.facades.HookFacade
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-class WebhookController(private var hookFacade: HookFacade, meterRegisrty: MeterRegistry) {
+class WebhookController(private var hookFacade: HookFacade) {
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.GET, RequestMethod.DELETE])
-    suspend fun bodyLessWebhook(
+    fun bodyLessWebhook(
             @PathVariable name: String,
             @RequestHeader headers: Map<String, String>
     ): ResponseEntity<Map<String, String>> {
@@ -19,7 +18,7 @@ class WebhookController(private var hookFacade: HookFacade, meterRegisrty: Meter
     }
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.POST, RequestMethod.PATCH, RequestMethod.PUT])
-    suspend fun bodyWebhook(
+    fun bodyWebhook(
             @PathVariable name: String,
             @RequestBody body: Map<String, String>,
             @RequestHeader headers: Map<String, String>,
@@ -36,12 +35,12 @@ class WebhookController(private var hookFacade: HookFacade, meterRegisrty: Meter
     }
 
     @GetMapping("/hook/{name}/events")
-    suspend fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
+    fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
         return ResponseEntity.ok(hookFacade.getEvents(name))
     }
 
     @PatchMapping("/hook/{name}/response")
-    suspend fun patchResponse(
+    fun patchResponse(
             @PathVariable name: String,
             @RequestBody body: Map<String, String>
     ): ResponseEntity<Map<String, String>> {
