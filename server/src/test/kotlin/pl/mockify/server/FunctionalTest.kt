@@ -14,16 +14,15 @@ class FunctionalTest : TestBase() {
         testHelper.givenGet("/hook/test")
 
         //when
-        testHelper.whenGet("/hook/test")
+        val response = testHelper.whenGet("/hook/test")
 
         //then
         val hook = hookRepository.findByName("test")
 
+        response.statusCode shouldBe HttpStatus.SC_OK
         assert(hook.isPresent)
         hook.ifPresent {
             it.name shouldBe "test"
-            it.events.size shouldBe 1
-            it.events[0].request.method shouldBe "GET"
         }
     }
 
@@ -34,18 +33,18 @@ class FunctionalTest : TestBase() {
         testHelper.givenGet("/hook/test")
 
         //when
-        testHelper.whenGet("/hook/test")
-        testHelper.whenGet("/hook/test")
+        val response1 = testHelper.whenGet("/hook/test")
+        val response2 = testHelper.whenGet("/hook/test")
 
         //then
         val hook = hookRepository.findByName("test")
 
+        response1.statusCode shouldBe HttpStatus.SC_OK
+        response2.statusCode shouldBe HttpStatus.SC_OK
+
         assert(hook.isPresent)
         hook.ifPresent {
             it.name shouldBe "test"
-            it.events.size shouldBe 2
-            it.events[0].request.method shouldBe "GET"
-            it.events[1].request.method shouldBe "GET"
         }
     }
 
@@ -58,19 +57,16 @@ class FunctionalTest : TestBase() {
         testHelper.givenPost("/hook/test", givenBody)
 
         //when
-        testHelper.whenPost("/hook/test", givenBody)
+        testHelper.whenGet("/hook/test")
+        val response = testHelper.whenPost("/hook/test", givenBody)
 
         //then
         val hook = hookRepository.findByName("test")
 
+        response.statusCode shouldBe HttpStatus.SC_OK
         assert(hook.isPresent)
         hook.ifPresent {
             it.name shouldBe "test"
-            it.events.size shouldBe 2
-            it.events[0].request.method shouldBe "GET"
-            it.events[1].request.method shouldBe "POST"
-            it.events[1].request.body shouldBe givenBody
-
         }
     }
 
@@ -83,6 +79,7 @@ class FunctionalTest : TestBase() {
         testHelper.givenPut("/hook/test", givenBody)
 
         //when
+        testHelper.whenGet("/hook/test")
         val response = testHelper.whenPut("/hook/test", givenBody)
 
         //then
@@ -92,10 +89,6 @@ class FunctionalTest : TestBase() {
         assert(hook.isPresent)
         hook.ifPresent {
             it.name shouldBe "test"
-            it.events.size shouldBe 2
-            it.events[0].request.method shouldBe "GET"
-            it.events[1].request.method shouldBe "POST"
-            it.events[1].request.body shouldBe givenBody
 
         }
     }

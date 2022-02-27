@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.put
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import io.restassured.RestAssured
+import io.restassured.http.ContentType
 import io.restassured.response.Response
 import org.springframework.stereotype.Component
 
@@ -35,6 +36,7 @@ class TestHelper {
     fun whenPost(path: String, body: String): Response {
         return RestAssured.with()
             .body(body)
+            .contentType(ContentType.JSON)
             .`when`()
             .post(path)
     }
@@ -42,6 +44,7 @@ class TestHelper {
     fun whenPut(path: String, body: String): Response {
         return RestAssured.with()
             .body(body)
+            .contentType(ContentType.JSON)
             .`when`()
             .put(path)
     }
