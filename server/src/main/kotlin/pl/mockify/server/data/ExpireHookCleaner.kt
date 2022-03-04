@@ -12,11 +12,11 @@ open class ExpireHookCleaner(private var hookRepository: HookRepository) {
 
     private var logger = KotlinLogging.logger("ExpireHookCleaner")
 
-    @Scheduled(cron = "0 */15 * ? * *")
+    @Scheduled(fixedDelay = 900000)
     @Transactional
     open fun execute() {
         logger.info { "Executing Scheduler" }
-        val timeStamp = Timestamp.valueOf(LocalDateTime.now().minusHours(8))
+        val timeStamp = Timestamp.valueOf(LocalDateTime.now().minusHours(24))
         val hooks = hookRepository.findByLastModifiedBefore(timeStamp)
         logger.info { "cleaning ${hooks.size} hooks" }
         hookRepository.deleteAll(hooks)

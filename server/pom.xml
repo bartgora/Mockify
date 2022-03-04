@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.mockify</groupId>
 	<artifactId>server</artifactId>
-	<version>1.1.3</version>
+	<version>1..3</version>
 	<name>server</name>
 	<description>Rest server for Mockify</description>
 	<properties>
@@ -25,6 +25,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
@@ -111,7 +115,7 @@
 
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
+		<testSourceDirectory>src/test/kotlin</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
