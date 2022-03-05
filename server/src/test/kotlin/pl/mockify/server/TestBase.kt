@@ -8,31 +8,29 @@ import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.test.context.TestConstructor
 import org.springframework.util.SocketUtils
-import pl.mockify.server.data.HookRepository
 import pl.mockify.server.domain.facades.HookFacade
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = [ServerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 open class TestBase {
 
     @LocalServerPort
     private val port = 0
 
     @Autowired
-    lateinit var hookRepository: HookRepository
-
-    @Autowired
     lateinit var hookFacade: HookFacade
 
     @Autowired
-    lateinit var repositories: List<CrudRepository<*, *>>
+    lateinit var repositories: List<JpaRepository<*, *>>
 
     @Autowired
     lateinit var testHelper: TestHelper
@@ -44,7 +42,7 @@ open class TestBase {
 
     @BeforeEach
     fun clearRepositories() {
-        repositories.map { crudRepository -> crudRepository.deleteAll() }
+        repositories.map { repository -> repository.deleteAllInBatch() }
     }
 
     @BeforeEach

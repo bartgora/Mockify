@@ -3,9 +3,10 @@ package pl.mockify.server
 import io.kotest.matchers.shouldBe
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Test
+import pl.mockify.server.data.HookRepository
 
 
-class FunctionalTest : TestBase() {
+class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
 
     @Test
     fun `should Add new Hook`() {
@@ -80,6 +81,30 @@ class FunctionalTest : TestBase() {
 
         //when
         testHelper.whenGet("/hook/test")
+        val response = testHelper.whenPut("/hook/test", givenBody)
+
+        //then
+        val hook = hookRepository.findByName("test")
+
+        response.statusCode shouldBe HttpStatus.SC_OK
+        assert(hook.isPresent)
+        hook.ifPresent {
+            it.name shouldBe "test"
+
+        }
+    }
+
+    @Test
+    fun `should Add PATCH event to Hook`() {
+
+        //given
+        val givenBody = "{\"Size\" : \"20\"}"
+        testHelper.givenGet("/hook/test")
+        testHelper.givenPatch("/hook/test", givenBody)
+
+        //when
+        testHelper.whenGet("/hook/test")
+        testHelper.whenPatch("/hook/test", givenBody)
         val response = testHelper.whenPut("/hook/test", givenBody)
 
         //then
