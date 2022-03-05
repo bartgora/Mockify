@@ -8,13 +8,13 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Component
-open class ExpireHookCleaner(private var hookRepository: HookRepository) {
+class ExpireHookCleaner(private var hookRepository: HookRepository) {
 
     private var logger = KotlinLogging.logger("ExpireHookCleaner")
 
     @Scheduled(cron = "0 */15 * ? * *")
     @Transactional
-    open fun execute() {
+    fun execute() {
         logger.info { "Executing Scheduler" }
         val timeStamp = Timestamp.valueOf(LocalDateTime.now().minusHours(24))
         val hooks = hookRepository.findByLastModifiedBefore(timeStamp)
