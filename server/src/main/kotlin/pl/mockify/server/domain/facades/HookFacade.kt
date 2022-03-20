@@ -10,7 +10,7 @@ import pl.mockify.server.domain.services.HookService
 import java.time.LocalDateTime
 
 @Component
-class HookFacade(private val jpaHookService: HookService, private val hookFactory: HookFactory) {
+class HookFacade(private val hookService: HookService, private val hookFactory: HookFactory) {
 
     fun processRequest(
         name: String,
@@ -31,16 +31,16 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
     }
 
     fun updateResponse(name: String, body: Map<String, String>): Response {
-        val hook = jpaHookService.getHook(name) ?: throw IllegalStateException("No Hook!")
+        val hook = hookService.getHook(name) ?: throw IllegalStateException("No Hook!")
         val newResponse = Response(body)
         hook.responseTemplate = newResponse
-        jpaHookService.updateResponse(hook)
+        hookService.updateResponse(hook)
 
         return newResponse
     }
 
     fun getEvents(name: String): List<Event> {
-        val hook = jpaHookService.getHook(name)?: throw IllegalStateException("No Hook!")
+        val hook = hookService.getHook(name)?: throw IllegalStateException("No Hook!")
         return hook.events
     }
 
@@ -50,12 +50,12 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
         headers: Map<String, String>,
         method: HttpMethod
     ): Response {
-        val exitingHook = jpaHookService.getHook(name)
+        val exitingHook = hookService.getHook(name)
         if (exitingHook == null) {
             throw IllegalStateException("No hook!")
         } else {
             exitingHook.addEvent(createEvent(method, body, headers, exitingHook.responseTemplate))
-            jpaHookService.saveHook(exitingHook)
+            hookService.saveHook(exitingHook)
         }
 
         return exitingHook.events.map { event -> event.response }.last()
@@ -77,16 +77,16 @@ class HookFacade(private val jpaHookService: HookService, private val hookFactor
         headers: Map<String, String>,
         method: HttpMethod
     ): Response {
-        var existingHook = jpaHookService.getHook(name)
+        var existingHook = hookService.getHook(name)
         if (existingHook == null) {
             if (method == HttpMethod.GET) {
-                existingHook = jpaHookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
+                existingHook = hookService.saveHook(hookFactory.createNewHook(name, body, headers, HttpMethod.GET))
             } else {
                 throw IllegalStateException("No Hook!")
             }
         } else {
             existingHook.addEvent(createEvent(method, body, headers, existingHook.responseTemplate))
-            jpaHookService.saveHook(existingHook)
+            hookService.saveHook(existingHook)
         }
         return existingHook.events.map { event -> event.response }.last()
     }
