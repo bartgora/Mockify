@@ -1,24 +1,28 @@
-import React from 'react';
-import {Event} from '../actions';
+import React from "react";
+import { Event } from "../actions";
+import style from "./components.module.scss";
 
 interface Props {
   event: Event;
 }
-class EventPanel extends React.Component<Props, Props> {
-  render(): React.ReactNode {
-    const content = JSON.stringify(this.props.event.response.body);
-    return (
-      <div className="item">
-        <div className="content">
-          <div className="header">
-            Method: {this.props.event.request.method}, Date: {this.props.event.timestamp}
-          </div>
-          <div className="content">{content}</div>
-          <div className="ui divider"></div>
-        </div>
-      </div>
-    );
-  }
-}
+export default function EventPanel(props: Props) {
+  const response = JSON.stringify(props.event.response.body, null, 4);
+  const request = JSON.stringify(props.event.request.body, null, 4);
 
-export default EventPanel;
+  return (
+    <div className={style.item}>
+      <div className="content">
+        <div className="header">
+          Method: {props.event.request.method}, Date: {props.event.timestamp}
+        </div>
+        <div className="content">
+          <pre>{request}</pre>
+        </div>
+        <div className="content">
+          <pre>{response}</pre>
+        </div>
+        <div className="ui divider"></div>
+      </div>
+    </div>
+  );
+}

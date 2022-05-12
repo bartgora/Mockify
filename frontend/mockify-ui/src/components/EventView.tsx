@@ -1,21 +1,16 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {Event, fetchData} from '../actions';
-import {StoreState} from '../reducers';
-import EventPanel from './EventPanel';
+import React from "react";
+import { connect } from "react-redux";
+import { Event, fetchData } from "../actions";
+import { StoreState } from "../reducers";
+import EventPanel from "./EventPanel";
 
 interface Props {
   events: Event[];
-  fetchData: Function;
 }
 
-class _EventsView extends React.Component<Props> {
-  componentDidMount() {
-    const path = window.location.pathname;
-    this.props.fetchData(path);
-  }
-  render() {
-    if (!this.props.events.length) {
+export function EventsView(props: Props) {
+  {
+    if (!props.events.length) {
       return <div>Loading...</div>;
     }
     let index = 0;
@@ -23,7 +18,7 @@ class _EventsView extends React.Component<Props> {
       <>
         <div className="ui header">Events</div>
         <div className="ui divider"></div>
-        {this.props.events.map((event) => {
+        {props.events.map((event) => {
           return (
             <div key={index++} className="ui items">
               <EventPanel event={event} />
@@ -34,9 +29,34 @@ class _EventsView extends React.Component<Props> {
     );
   }
 }
+// class _EventsView extends React.Component<Props> {
+//   componentDidMount() {
+//     const path = window.location.pathname;
+//     this.props.fetchData(path);
+//   }
+//   render() {
+//     if (!this.props.events.length) {
+//       return <div>Loading...</div>;
+//     }
+//     let index = 0;
+//     return (
+//       <>
+//         <div className="ui header">Events</div>
+//         <div className="ui divider"></div>
+//         {this.props.events.map((event) => {
+//           return (
+//             <div key={index++} className="ui items">
+//               <EventPanel event={event} />
+//             </div>
+//           );
+//         })}
+//       </>
+//     );
+//   }
+// }
 
-const mapStateToProps = (state: StoreState): { events: Event[] } => {
-  return { events: state.events };
-};
+// const mapStateToProps = (state: StoreState): { events: Event[] } => {
+//   return { events: state.events };
+// };
 
-export const EventsView = connect(mapStateToProps, { fetchData })(_EventsView);
+// export const EventsView = connect(mapStateToProps, { fetchData })(_EventsView);
