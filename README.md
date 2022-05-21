@@ -12,7 +12,7 @@ docker-compose up -d
 
 ## Api docs
 
-```http request
+```
 http://localhost:8080/swagger-ui/index.html
 ```
 
@@ -20,7 +20,7 @@ http://localhost:8080/swagger-ui/index.html
 
 1. Create a new webhook
 
-```http request
+```
 GET http://localhost:8080/hook/[CUSTOMNANE]
 ```
 
@@ -51,7 +51,7 @@ body:
 
 3. View all events
 
-```http request
+```
 GET http://localhost:8080/hook/[CUSTOMNANE]/events
 ```
 
@@ -121,6 +121,6 @@ Response:
 ```
 ## Supported HTTP Methods
 
-```http request
+```
 GET, POST, PUT, PATCH DELETE
 ```
