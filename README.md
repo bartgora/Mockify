@@ -34,7 +34,7 @@ response:
 
 2. Modify response
 
-```http request
+```
 PATCH http://localhost:8080/hook/[CUSTOMNANE]/reponse
 ```
 
