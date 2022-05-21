@@ -8,6 +8,7 @@ services:
     hostname: postgresql
     environment:
       POSTGRES_PASSWORD: pa$$word
+      POSTGRES_DB: mockify
 
   server:
     container_name: server
