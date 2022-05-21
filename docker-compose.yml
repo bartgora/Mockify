@@ -19,12 +19,3 @@ services:
       DATABASE_URL: "jdbc:postgresql://postgresql:5432/mockify"
       USER_NAME: postgres
       PASSWORD: pa$$word
-
-  webapp:
-    container_name: webapp
-    depends_on: [server]
-    image: bartlomiejgora/mockify-ui
-    ports:
-      - "3000:80"
-    environment:
-      REACT_APP_BASE_URL: server
