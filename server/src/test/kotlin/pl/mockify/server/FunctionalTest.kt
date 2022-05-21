@@ -1,6 +1,7 @@
 package pl.mockify.server
 
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Test
 import pl.mockify.server.data.HookRepository
@@ -9,7 +10,7 @@ import pl.mockify.server.data.HookRepository
 class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
 
     @Test
-    fun `should Add new Hook`() {
+    fun `should add new Hook and one GET event to hook`() {
 
         //given
         testHelper.givenGet("/hook/test")
@@ -21,14 +22,16 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
         val hook = hookRepository.findByName("test")
 
         response.statusCode shouldBe HttpStatus.SC_OK
-        assert(hook.isPresent)
-        hook.ifPresent {
-            it.name shouldBe "test"
+        hook shouldNotBe null
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
         }
+
     }
 
     @Test
-    fun `should Add 2 events to Hook`() {
+    fun `should add 2 events to hook`() {
 
         //given
         testHelper.givenGet("/hook/test")
@@ -43,14 +46,19 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
         response1.statusCode shouldBe HttpStatus.SC_OK
         response2.statusCode shouldBe HttpStatus.SC_OK
 
-        assert(hook.isPresent)
-        hook.ifPresent {
-            it.name shouldBe "test"
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
         }
+        val event2 = hook?.events?.get(1)
+        if (event2 != null) {
+            event2.request.method shouldBe "GET"
+        }
+
     }
 
     @Test
-    fun `should Add POST event to Hook`() {
+    fun `should add POST event to hook`() {
 
         //given
         val givenBody = "{\"Size\" : \"20\"}"
@@ -65,14 +73,20 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
         val hook = hookRepository.findByName("test")
 
         response.statusCode shouldBe HttpStatus.SC_OK
-        assert(hook.isPresent)
-        hook.ifPresent {
-            it.name shouldBe "test"
+
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
         }
+        val event2 = hook?.events?.get(1)
+        if (event2 != null) {
+            event2.request.method shouldBe "POST"
+        }
+
     }
 
     @Test
-    fun `should Add PUT event to Hook`() {
+    fun `should add PUT event to hook`() {
 
         //given
         val givenBody = "{\"Size\" : \"20\"}"
@@ -87,15 +101,20 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
         val hook = hookRepository.findByName("test")
 
         response.statusCode shouldBe HttpStatus.SC_OK
-        assert(hook.isPresent)
-        hook.ifPresent {
-            it.name shouldBe "test"
 
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
         }
+        val event2 = hook?.events?.get(1)
+        if (event2 != null) {
+            event2.request.method shouldBe "PUT"
+        }
+
     }
 
     @Test
-    fun `should Add PATCH event to Hook`() {
+    fun `should add PATCH event to hook`() {
 
         //given
         val givenBody = "{\"Size\" : \"20\"}"
@@ -104,17 +123,47 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
 
         //when
         testHelper.whenGet("/hook/test")
-        testHelper.whenPatch("/hook/test", givenBody)
-        val response = testHelper.whenPut("/hook/test", givenBody)
+        val response = testHelper.whenPatch("/hook/test", givenBody)
 
         //then
         val hook = hookRepository.findByName("test")
 
         response.statusCode shouldBe HttpStatus.SC_OK
-        assert(hook.isPresent)
-        hook.ifPresent {
-            it.name shouldBe "test"
 
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
         }
+        val event2 = hook?.events?.get(1)
+        if (event2 != null) {
+            event2.request.method shouldBe "PATCH"
+        }
+
+    }
+
+    @Test
+    fun `should add DELETE event to hook`() {
+
+        //given
+        testHelper.givenGet("/hook/test")
+        testHelper.givenDelete("/hook/test")
+
+        //when
+        testHelper.whenGet("/hook/test")
+        val response = testHelper.whenDelete("/hook/test")
+
+        //then
+        val hook = hookRepository.findByName("test")
+
+        response.statusCode shouldBe HttpStatus.SC_OK
+        val event = hook?.events?.get(0)
+        if (event != null) {
+            event.request.method shouldBe "GET"
+        }
+        val event2 = hook?.events?.get(1)
+        if (event2 != null) {
+            event2.request.method shouldBe "DELETE"
+        }
+
     }
 }
