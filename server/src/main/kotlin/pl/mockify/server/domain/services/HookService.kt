@@ -9,10 +9,12 @@ import pl.mockify.server.domain.converters.convertHookFromDB
 import pl.mockify.server.domain.converters.convertHookToDB
 import java.sql.Timestamp
 import java.time.LocalDateTime
+import javax.transaction.Transactional
 
 @Service
 class HookService(private var hookRepository: HookRepository) {
 
+    @Transactional
     fun saveHook(hook: Hook): Hook {
         val existingHook = hookRepository.findByName(hook.name)?: null
         if (existingHook !== null) {
@@ -24,12 +26,14 @@ class HookService(private var hookRepository: HookRepository) {
         return convertHookFromDB(hookRepository.save(convertHookToDB(hook)))
     }
 
+    @Transactional
      fun getHook(customName: String): Hook? {
         val hook = hookRepository.findByName(customName)?: return null
         return convertHookFromDB(hook)
 
     }
 
+    @Transactional
      fun updateResponse(hook: Hook): Hook {
         val existingHook = hookRepository.findByName(hook.name)?: throw IllegalStateException("No Hook!")
         existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
