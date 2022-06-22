@@ -1,6 +1,7 @@
 package pl.mockify.server.domain.services
 
 import org.springframework.stereotype.Service
+import pl.mockify.server.data.EventRepository
 import pl.mockify.server.data.HookRepository
 import pl.mockify.server.domain.Hook
 import pl.mockify.server.domain.converters.bodyToString
@@ -11,7 +12,7 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Service
-class HookService(private var hookRepository: HookRepository) {
+class HookService(private var hookRepository: HookRepository, private var evenRepository: EventRepository) {
 
     fun saveHook(hook: Hook): Hook {
         val existingHook = hookRepository.findByName(hook.name)?: null
@@ -36,5 +37,10 @@ class HookService(private var hookRepository: HookRepository) {
         val saveHook = hookRepository.save(existingHook)
         return convertHookFromDB(saveHook)
 
+    }
+
+    fun removeEvents(hook: Hook){
+        val existingHook = hookRepository.findByName(hook.name)?: throw IllegalStateException("No Hook!")
+        evenRepository.deleteAll(existingHook.events)
     }
 }
