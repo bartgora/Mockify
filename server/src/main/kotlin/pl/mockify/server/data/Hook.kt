@@ -16,7 +16,7 @@ class Hook {
     @Column(columnDefinition = "TEXT")
     lateinit var responseTemplate: String
 
-    @OneToMany(cascade = [CascadeType.ALL])
+    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     lateinit var events: List<Event>
 
     @Column

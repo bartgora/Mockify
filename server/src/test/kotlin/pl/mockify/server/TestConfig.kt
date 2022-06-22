@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 internal open class TestConfig {
 
     @Bean(destroyMethod = "stop")
-    open fun wireMockServer(@Value("\${wiremock.port}") wiremockPort: Int): WireMockServer {
+     fun wireMockServer(@Value("\${wiremock.port}") wiremockPort: Int): WireMockServer {
         WireMock.configureFor(wiremockPort)
         return WireMockServer(wiremockPort).apply {
             this.start()

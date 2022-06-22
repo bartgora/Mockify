@@ -1,13 +1,16 @@
 package pl.mockify.server.domain.services
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 
 import pl.mockify.server.TestBase
 import pl.mockify.server.data.*
 import pl.mockify.server.domain.converters.convertHookFromDB
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import javax.transaction.Transactional
 
 internal class HookServiceTest(
     private var hookRepository: HookRepository,
@@ -15,20 +18,12 @@ internal class HookServiceTest(
 ) : TestBase() {
 
     @Test
+    @Transactional
     fun removeEvents() {
 
         //given
-        val givenHook = Hook()
-        givenHook.name = "bartek"
-        givenHook.responseTemplate = "{}"
-        val givenEvent = Event()
-        givenEvent.response = Response()
-        givenEvent.request = Request().apply {
-            method = "GET"
-            headers = "{}"
-        }
+        val givenHook = givenHook()
 
-        givenHook.events = listOf(givenEvent)
 
         //when
         hookRepository.save(givenHook)
@@ -39,6 +34,22 @@ internal class HookServiceTest(
         result shouldNotBe null
         result?.events shouldBe emptyList()
 
+    }
 
+    private fun givenHook(): Hook{
+        var givenHook = Hook()
+        givenHook.name = "bartek"
+        givenHook.responseTemplate = "{}"
+        val givenEvent = Event()
+        givenEvent.timestamp = Timestamp.from(LocalDateTime.now().toInstant(ZoneOffset.UTC))
+        givenEvent.response = Response()
+        givenEvent.request = Request().apply {
+            method = "GET"
+            headers = "{}"
+        }
+
+        givenHook.events = listOf(givenEvent)
+
+        return givenHook
     }
 }
