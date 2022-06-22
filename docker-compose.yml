@@ -5,7 +5,6 @@ services:
     image: postgres:alpine3.15
     ports:
       - "5432:5432"
-    hostname: postgresql
     environment:
       POSTGRES_PASSWORD: pa$$word
       POSTGRES_DB: mockify
@@ -17,6 +16,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: "jdbc:postgresql://postgresql:5432/mockify"
+      DATABASE_URL: "jdbc:postgresql://database:5432/mockify"
       USER_NAME: postgres
       PASSWORD: pa$$word
