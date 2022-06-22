@@ -17,7 +17,7 @@ class HookService(private var hookRepository: HookRepository, private var eventR
 
     @Transactional
     fun saveHook(hook: Hook): Hook {
-        val existingHook = hookRepository.findByName(hook.name) ?: null
+        val existingHook = hookRepository.findByName(hook.name)
         if (existingHook !== null) {
             existingHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
             existingHook.responseTemplate = bodyToString(hook.responseTemplate.body)
@@ -45,6 +45,6 @@ class HookService(private var hookRepository: HookRepository, private var eventR
     @Transactional
     fun removeEvents(hook: Hook) {
         val existingHook = hookRepository.findByName(hook.name) ?: throw IllegalStateException("No Hook!")
-        eventRepository.deleteAllEventsByHook(existingHook)
+        hookRepository.delete(existingHook)
     }
 }

@@ -50,8 +50,6 @@ class Event {
     @OneToOne(cascade = [CascadeType.ALL])
     lateinit var response: Response
 
-    @ManyToOne
-    lateinit var hook: Hook
 }
 
 @Entity

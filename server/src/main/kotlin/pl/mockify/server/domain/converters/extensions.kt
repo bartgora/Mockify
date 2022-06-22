@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package pl.mockify.server.domain.converters
 
 import com.fasterxml.jackson.databind.ObjectMapper

@@ -1,7 +1,6 @@
 package pl.mockify.server.domain.services
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 
 import pl.mockify.server.TestBase
@@ -31,8 +30,7 @@ internal class HookServiceTest(
 
         //then
         val result = hookRepository.findByName("bartek")
-        result shouldNotBe null
-        result?.events shouldBe emptyList()
+        result shouldBe null
 
     }
 
