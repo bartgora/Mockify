@@ -45,6 +45,8 @@ class HookService(private var hookRepository: HookRepository, private var eventR
     @Transactional
     fun removeEvents(hook: Hook) {
         val existingHook = hookRepository.findByName(hook.name) ?: throw IllegalStateException("No Hook!")
-        hookRepository.delete(existingHook)
+        val events = existingHook.events
+        existingHook.events = emptyList();
+        eventRepository.deleteAll(events)
     }
 }

@@ -30,7 +30,7 @@ internal class HookServiceTest(
 
         //then
         val result = hookRepository.findByName("bartek")
-        result shouldBe null
+        result?.events shouldBe emptyList()
 
     }
 
