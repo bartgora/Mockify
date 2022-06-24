@@ -44,6 +44,10 @@ class HookFacade(private val hookService: HookService, private val hookFactory: 
         return hook.events
     }
 
+    fun deleteEvents(name: String){
+        val hook = hookService.getHook(name)?: throw IllegalStateException("No Hook!")
+        hookService.removeEvents(hook)
+    }
     private fun processWithRequestBody(
         name: String,
         body: Map<String, String>?,

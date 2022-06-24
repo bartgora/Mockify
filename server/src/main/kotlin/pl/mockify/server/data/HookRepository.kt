@@ -6,7 +6,6 @@ import java.sql.Timestamp
 import javax.transaction.Transactional
 
 @Repository
-@Transactional
 interface HookRepository : JpaRepository<Hook, Long> {
 
     fun findByLastModifiedBefore(lastModified: Timestamp): List<Hook>

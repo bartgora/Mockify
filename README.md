@@ -119,6 +119,12 @@ Response:
   }
 ]
 ```
+
+4. Delete all events for a Hook
+
+```
+DELETE http://localhost:8080/hook/[CUSTOMNANE]/events
+```
 ## Supported HTTP Methods
 
 ```
