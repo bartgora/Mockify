@@ -37,7 +37,6 @@ class FunctionalTest : TestBase() {
         response1.statusCode shouldBe HttpStatus.SC_OK
         response2.statusCode shouldBe HttpStatus.SC_OK
 
-
     }
 
     @Test
@@ -75,7 +74,6 @@ class FunctionalTest : TestBase() {
         response.statusCode shouldBe HttpStatus.SC_OK
 
 
-
     }
 
     @Test
@@ -111,6 +109,44 @@ class FunctionalTest : TestBase() {
         //then
         response.statusCode shouldBe HttpStatus.SC_OK
 
+    }
+
+    @Test
+    fun `should remove 2 events to hook`() {
+
+        //given
+        testHelper.givenGet("/hook/test")
+
+        //when
+        val response1 = testHelper.whenGet("/hook/test")
+        val response2 = testHelper.whenGet("/hook/test")
+        val deleteResponse = testHelper.whenDelete("hook/test/events")
+
+        //then
+        response1.statusCode shouldBe HttpStatus.SC_OK
+        response2.statusCode shouldBe HttpStatus.SC_OK
+        deleteResponse.statusCode shouldBe HttpStatus.SC_OK
+
+    }
+
+    @Test
+    fun `should remove 2 events to hook, and add one`() {
+
+        //given
+        testHelper.givenGet("/hook/test")
+
+        //when
+        val response1 = testHelper.whenGet("/hook/test")
+        val response2 = testHelper.whenGet("/hook/test")
+        val deleteResponse = testHelper.whenDelete("hook/test/events")
+        val response3 = testHelper.whenGet("/hook/test")
+
+        //then
+        response1.statusCode shouldBe HttpStatus.SC_OK
+        response2.statusCode shouldBe HttpStatus.SC_OK
+        deleteResponse.statusCode shouldBe HttpStatus.SC_OK
+        response3.statusCode shouldBe HttpStatus.SC_OK
+        response3.body shouldNotBe null
 
     }
 }

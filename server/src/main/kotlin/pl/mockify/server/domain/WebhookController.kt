@@ -42,6 +42,11 @@ class WebhookController(private var hookFacade: HookFacade) {
         return ResponseEntity.ok(hookFacade.getEvents(name))
     }
 
+    @DeleteMapping("/hook/{name}/events")
+    fun deleteEvents(@PathVariable name: String) {
+         hookFacade.deleteEvents(name)
+    }
+
     @PatchMapping("/hook/{name}/response")
     fun patchResponse(
             @PathVariable name: String,
