@@ -12,10 +12,13 @@ class WebhookController(private var hookFacade: HookFacade) {
     @RequestMapping("/hook/{name}", method = [RequestMethod.GET, RequestMethod.DELETE])
     fun bodyLessWebhook(
             @PathVariable name: String,
-            @RequestHeader headers: Map<String, String>
+            @RequestHeader headers: Map<String, String>,
+            servletRequest: HttpServletRequest
     ): ResponseEntity<Map<String, String>> {
-        return ResponseEntity.ok(hookFacade.processRequest(name, null, headers, HttpMethod.GET).body)
+        return ResponseEntity.ok(hookFacade.processRequest(name, null, headers, HttpMethod.valueOf(servletRequest.method)).body)
     }
+
+
 
     @RequestMapping("/hook/{name}", method = [RequestMethod.POST, RequestMethod.PATCH, RequestMethod.PUT])
     fun bodyWebhook(
@@ -37,6 +40,11 @@ class WebhookController(private var hookFacade: HookFacade) {
     @GetMapping("/hook/{name}/events")
     fun getEvents(@PathVariable name: String): ResponseEntity<List<Event>> {
         return ResponseEntity.ok(hookFacade.getEvents(name))
+    }
+
+    @DeleteMapping("/hook/{name}/events")
+    fun deleteEvents(@PathVariable name: String) {
+         hookFacade.deleteEvents(name)
     }
 
     @PatchMapping("/hook/{name}/response")

@@ -1,6 +1,7 @@
 package pl.mockify.server
 
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.delete
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.patch
@@ -33,6 +34,10 @@ class TestHelper {
         stubFor(patch(urlPathEqualTo(path)).withRequestBody(equalToJson(body)).willReturn(aResponse().withStatus(200)))
     }
 
+    fun givenDelete(path: String) {
+        stubFor(delete(path).willReturn(aResponse().withStatus(200)))
+    }
+
     fun whenGet(path: String): Response {
         return RestAssured.with()
             .`when`()
@@ -61,6 +66,12 @@ class TestHelper {
             .contentType(ContentType.JSON)
             .`when`()
             .patch(path)
+    }
+
+    fun whenDelete(path: String): Response {
+        return RestAssured.with()
+            .`when`()
+            .delete(path)
     }
 }
 
