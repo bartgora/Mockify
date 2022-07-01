@@ -1,6 +1,6 @@
-import React from "react";
-import { Event } from "../actions";
-import style from "./components.module.scss";
+import React from 'react';
+import { Event } from '../actions';
+import style from './components.module.scss';
 
 interface Props {
   event: Event;
