@@ -1,10 +1,8 @@
-import { EventsView } from "./components/EventView";
+import { Mainpage } from "./components/main-page-component"
 
 const App = () => {
   return (
-    <div className="ui segment">
-      <EventsView events={[]} />
-    </div>
+    <Mainpage/>
   );
 };
 
