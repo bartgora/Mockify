@@ -1,8 +1,16 @@
-import { Mainpage } from "./components/main-page-component"
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Mainpage } from "./components/main-page-component";
 
 const App = () => {
   return (
-    <Mainpage/>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Mainpage />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
