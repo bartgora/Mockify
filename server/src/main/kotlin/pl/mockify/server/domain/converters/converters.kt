@@ -13,7 +13,7 @@ fun convertHookToDB(hook: Hook): DBHook {
     val dbHook = DBHook()
     dbHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
     dbHook.name = hook.name
-    dbHook.responseTemplate = bodyToString(hook.responseTemplate.body)
+    dbHook.responseTemplate = hook.responseTemplate.body.bodyToString()
     dbHook.events = convertEventsToDB(hook.events)
     return dbHook
 }
@@ -21,7 +21,7 @@ fun convertHookToDB(hook: Hook): DBHook {
 fun convertResponseToDB(response: Response): DBResponse {
 
     val dbResponse = DBResponse()
-    dbResponse.body = bodyToString(response.body)
+    dbResponse.body = response.body.bodyToString()
     return dbResponse
 }
 
@@ -40,10 +40,10 @@ fun convertEventToDB(event: Event): DBEvent {
 
 fun convertRequestToDB(request: Request): DBRequest {
     val dbRequest = DBRequest()
-    dbRequest.headers = bodyToString(request.headers)
+    dbRequest.headers = request.headers.bodyToString()
     dbRequest.method = request.method.toString()
-    dbRequest.body = request.body?.let { bodyToString(it) }
-    return dbRequest;
+    dbRequest.body = request.body?.bodyToString()
+    return dbRequest
 }
 
 fun convertHookFromDB(dbHook: DBHook): Hook {
