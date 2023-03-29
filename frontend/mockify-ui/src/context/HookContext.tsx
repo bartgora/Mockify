@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
-import { Event } from "../api";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { createContext, useContext } from 'react';
+import { Event } from '../api';
 
 export interface IProperties {
   name?: string;
@@ -13,7 +14,7 @@ interface IHookState {
 
 interface IHookContext {
   hook: IHookState;
-  onCreate: () => {};
+  onCreate: () => void;
 }
 
 const HookContext = createContext<IHookContext>({
@@ -21,22 +22,13 @@ const HookContext = createContext<IHookContext>({
   onCreate: () => ({}),
 });
 
-export function HookContextProvider({
-  name,
-  events,
-  children,
-}: React.PropsWithChildren<IProperties>) {
-  const [hookName, setName] = useState();
-  function onCreate() {}
+export function HookContextProvider({ name, events, children }: React.PropsWithChildren<IProperties>) {
+  const onCreate = () => {};
   const hook = {
-    name: "bartek",
+    name: 'bartek',
     events: [],
   } as IHookState;
-  return (
-    <HookContext.Provider value={{ hook, onCreate }}>
-      {children}
-    </HookContext.Provider>
-  );
+  return <HookContext.Provider value={{ hook, onCreate }}>{children}</HookContext.Provider>;
 }
 
-export const HookStateContext = useContext(HookContext);
+export const useHook = useContext(HookContext);
