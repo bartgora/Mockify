@@ -16,7 +16,7 @@ class Hook {
     @Column(columnDefinition = "TEXT")
     lateinit var responseTemplate: String
 
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @OneToMany(cascade = [CascadeType.ALL])
     lateinit var events: List<Event>
 
     @Column
@@ -49,7 +49,6 @@ class Event {
 
     @OneToOne(cascade = [CascadeType.ALL])
     lateinit var response: Response
-
 }
 
 @Entity
