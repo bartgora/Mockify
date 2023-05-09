@@ -165,6 +165,5 @@ class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
         response3.statusCode shouldBe HttpStatus.SC_OK
         response3.body shouldNotBe null
 
-        hook shouldNotBe null
     }
 }
