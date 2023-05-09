@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import pl.mockify.server.data.HookRepository
 
 
-class FunctionalTest : TestBase() {
+class FunctionalTest(private val hookRepository: HookRepository) : TestBase() {
 
     @Test
     fun `should add new Hook and one GET event to hook`() {
@@ -19,9 +19,12 @@ class FunctionalTest : TestBase() {
         val response = testHelper.whenGet("/hook/test")
 
         //then
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response.statusCode shouldBe HttpStatus.SC_OK
 
     }
+
 
     @Test
     fun `should add 2 events to hook`() {
@@ -34,8 +37,11 @@ class FunctionalTest : TestBase() {
         val response2 = testHelper.whenGet("/hook/test")
 
         //then
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response1.statusCode shouldBe HttpStatus.SC_OK
         response2.statusCode shouldBe HttpStatus.SC_OK
+
 
     }
 
@@ -52,8 +58,9 @@ class FunctionalTest : TestBase() {
         val response = testHelper.whenPost("/hook/test", givenBody)
 
         //then
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response.statusCode shouldBe HttpStatus.SC_OK
-
 
     }
 
@@ -70,10 +77,9 @@ class FunctionalTest : TestBase() {
         val response = testHelper.whenPut("/hook/test", givenBody)
 
         //then
-
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response.statusCode shouldBe HttpStatus.SC_OK
-
-
     }
 
     @Test
@@ -89,10 +95,9 @@ class FunctionalTest : TestBase() {
         val response = testHelper.whenPatch("/hook/test", givenBody)
 
         //then
-
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response.statusCode shouldBe HttpStatus.SC_OK
-
-
     }
 
     @Test
@@ -107,8 +112,9 @@ class FunctionalTest : TestBase() {
         val response = testHelper.whenDelete("/hook/test")
 
         //then
+        val hook = hookRepository.findByName("test")
+        hook shouldNotBe null
         response.statusCode shouldBe HttpStatus.SC_OK
-
     }
 
     @Test

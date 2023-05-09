@@ -42,7 +42,7 @@ class Event {
     var id: Long = 0
 
     @Column
-    lateinit var timestamp : Timestamp
+    lateinit var timestamp: Timestamp
 
     @OneToOne(cascade = [CascadeType.ALL])
     lateinit var request: Request
