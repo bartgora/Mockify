@@ -14,20 +14,19 @@ class HookService(private var hookRepository: HookRepository, private var eventR
 
     @Transactional
     fun saveHook(hook: Hook): Hook {
-        val existingHook = hookRepository.findByName(hook.name)
-        if (existingHook !== null) {
-            existingHook.lastModified = Timestamp.valueOf(LocalDateTime.now())
-            existingHook.responseTemplate = hook.responseTemplate.body.bodyToString()
-            existingHook.events = existingHook.events.plus(convertEventToDB(hook.events.last()))
-            return convertHookFromDB(hookRepository.save(existingHook))
+        hookRepository.findByName(hook.name)?.let {
+            it.lastModified = Timestamp.valueOf(LocalDateTime.now())
+            it.responseTemplate = hook.responseTemplate.body.bodyToString()
+            it.events = it.events.plus(convertEventToDB(hook.events.last()))
+            return convertHookFromDB(hookRepository.save(it))
         }
+
         return convertHookFromDB(hookRepository.save(convertHookToDB(hook)))
     }
 
     @Transactional
     fun getHook(customName: String): Hook? {
-        val hook = hookRepository.findByName(customName) ?: return null
-        return convertHookFromDB(hook)
+        return hookRepository.findByName(customName)?.let { return convertHookFromDB(it) }
     }
 
     @Transactional
